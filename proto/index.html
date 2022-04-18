@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <title>MAT</title>
+        <script src="./js/jquery-3.6.0.min.js"></script>
+        <!--<link rel="stylesheet" href="style.css">
+        <script src="script.js"></script>-->
+    </head>
+    <body>
+        <form id="check-step-1" autocomplete="off" action="javascript:void(0);">
+            <input id="user" type="text" autocomplete="off" required />
+            <input type="submit" onclick="advance()" />
+        </form>
+    </body>
+    <!--<script type="module">
+        import init, {generate} from "./wasm/wasm.js";
+        init()
+            .then(() => {
+                generate()
+            });
+    </script>-->
+    <!--<script type="module">
+        fetch("./wasm/wasm_bg.wasm")
+        .then(bytes => bytes.arrayBuffer())
+        .then(mod => WebAssembly.compile(mod))
+        .then(async module => {
+            let instance = await WebAssembly.instanciate(module);
+            console.log(instance.exports.generate());
+        })
+    </script>-->
+    <script>
+        let state_reference = ['check-step-1','check-step-2'];
+        let state = 0;
+        let user = null;
+        function advance() {
+            if (state === 0) {
+                let temp = document.getElementById('user');
+                temp.value = temp.value.replace(/\s/g, '');
+                if (temp.value != '') {
+                    user = temp.value;
+                }
+            }
+        }
+        function generate() {
+            return '1235446';
+        }
+    </script>
+</html>
