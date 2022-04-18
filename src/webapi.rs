@@ -11,6 +11,7 @@ use rocket::fs::NamedFile;
 use rocket::response::{Redirect,Flash,status::NotFound};
 use rocket::form::Form;
 
+use time::{OffsetDateTime,Duration};
 
 #[get("/")]
 pub async fn index() -> Result<NamedFile, NotFound<String>> {
@@ -41,7 +42,7 @@ pub fn index_post(args: String) -> String {
 
 #[post("/logout")]
 pub fn logout(jar: &CookieJar<'_>) -> Flash<Redirect> {
-    println!("{:#?}",jar.get("user_id"));
+    //println!("{:#?}",jar.get_private("user_id"));
     jar.remove_private(Cookie::named("user_id"));
     Flash::success(Redirect::to(uri!(index)), "Successfully logged out.")
 }

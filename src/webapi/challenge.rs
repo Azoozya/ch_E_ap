@@ -7,7 +7,7 @@ use crate::webapi::Status;
 use crate::webapi::CHEAPError;
 
 use crate::webapi::{Cookie,CookieJar};
-
+use crate::webapi::{OffsetDateTime,Duration};
 
 #[derive(FromForm,Debug)]
 pub struct Challenge {
@@ -95,9 +95,15 @@ fn stage1(chlg: Challenge) -> (Status,&'static str) {
 
 fn stage2(jar: &CookieJar<'_>, chlg: Challenge) -> (Status,&'static str) {
     if chlg.signed == String::from("1235446") {
-        let cookie = Cookie::new("user_id", "Welcome !".to_string());
-
-        //Store it in db with expiration after 15min
+        let offset = OffsetDateTime::now_utc() + Duration::minutes(15);
+        let cookie = Cookie::build("user_id", "Welcome !".to_string())
+                            .expires(offset)
+                            .finish();
+        
+        //Store expiration time
+        println!("{:#?}",offset.timestamp());
+        
+        //No need to store cookie, if get_private call return nothing it means cookie has been altered
         jar.add_private(cookie);
 
         (Status::Ok,"Access Granted :3")
