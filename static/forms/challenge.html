@@ -1,0 +1,32 @@
+<html>
+<head>
+	<script src="/js/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+	<div id="menu">
+		<lu>
+			<button id="sub">Click me!</button>
+		</lu>
+	</div>
+</body>
+<script type="module">
+	import init, {generate} from "/js/wasm.js";
+	function gen() {
+		init()
+			.then( 
+				() => { 
+					let payload = 'value='+generate();
+					$.post("/challenge",payload,() => {
+						console.log(payload);
+					},"text")
+						.then( 
+							resp => {
+								console.log(resp);
+							}
+						);
+				} 
+			);
+	}
+	document.getElementById('sub').addEventListener('click', gen, true);
+</script>
+</html>
