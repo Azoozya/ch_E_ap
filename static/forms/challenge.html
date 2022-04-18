@@ -4,29 +4,75 @@
 </head>
 <body>
 	<div id="menu">
-		<lu>
-			<button id="sub">Click me!</button>
-		</lu>
+		<form autocomplete="off" action="javascript:void(0);">
+            <input id="user.name" type="text" autocomplete="off" required />
+			<button id="auth">Click me...</button>
+        </form>
+        <form method="post" action="/logout">
+			<button id="logout">logout</button>
+        </form>
 	</div>
 </body>
 <script type="module">
 	import init, {generate} from "/js/wasm.js";
-	function gen() {
+	function auth() {
+        let user = document.getElementById('user.name').value;
+        if (user != '')
+            stg1(user);
+    }
+    
+    function stg1(user) {
+		let payload = 'stage=1&user='+ user +'&signed=';
+		$.post("/login",payload,"text")
+            // Clean it later
+            .always( () => { console.log("1: "+payload); })
+            .done(
+                resp => {
+                    stg2(user,resp);
+			    }
+            )            
+            .fail( 
+                resp => {
+                    // need to add a dialog box, if user is ok, call pageRedirect
+                    if (resp.status === 303) {
+                        alert("Sorry, we haven't met yet.")
+                        pageRedirect(resp.responseText); 
+                    }
+                }
+            );
+	}
+	
+    function stg2(user,nonce) {
 		init()
 			.then( 
 				() => { 
-					let payload = 'value='+generate();
-					$.post("/challenge",payload,() => {
-						console.log(payload);
-					},"text")
-						.then( 
+					let payload = 'stage=2&user='+ user +'&signed='+generate();
+					$.post("/login",payload,"text")
+                        // Clean it later
+                        .always( () => { console.log("2: "+payload); })
+						.done( 
 							resp => {
-								console.log(resp);
+                                alert("Welcome ! Here is your cookie, don't forget the milk and go on ~:)");
+                                // Browser reject the redirection O_o
+                                pageRedirect(resp.responseText); 
 							}
-						);
+						)
+                        .fail(
+                            resp => {
+                                if (resp.status === 401)
+                                    alert("Incorrect private key provided !");
+                                else
+                                    alert("Unknown error returned.");
+                            }
+                        );
 				} 
 			);
 	}
-	document.getElementById('sub').addEventListener('click', gen, true);
+    
+    function pageRedirect(url) {
+        $(location).attr("href", url);
+    }
+	
+    document.getElementById('auth').addEventListener('click', auth, true);
 </script>
 </html>

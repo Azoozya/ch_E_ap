@@ -12,8 +12,8 @@ use lazy_static::lazy_static;
 
 mod webapi;
 mod error;
-use crate::webapi::{index,server_js,server_wasm};
-use crate::webapi::challenge::{post_challenge};
+use crate::webapi::{index,server_js,server_wasm,logout};
+use crate::webapi::challenge::{login};
 
 lazy_static! {
     static ref SQLITE_FILE_AUTH: String = String::from("data/auth.db");
@@ -37,7 +37,8 @@ fn rocket() -> Rocket<Build> {
                 server_js,
                 server_wasm,
 
-                post_challenge,
+                login,
+                logout,
             ],
         )
 }
