@@ -2,7 +2,4 @@
 template_dir = "static"
 secret_key="wewDiFVh9CE+vSFE3rPjtlr6cJOJVaVThoWz3v2c2Vo="
 
-[default.databases.sqlite_database]
-url = "data/auth.db"
-
 # https://rocket.rs/v0.5-rc/guide/configuration/

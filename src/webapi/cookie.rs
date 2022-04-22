@@ -1,1 +1,1 @@
-use crate::SQLITE_FILE_AUTH;
+use crate::SQL_AUTH;

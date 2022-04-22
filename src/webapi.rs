@@ -1,5 +1,3 @@
-use crate::SQLITE_FILE_AUTH;
-
 pub mod challenge;
 pub mod cookie;
 

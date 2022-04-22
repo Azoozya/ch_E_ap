@@ -1,6 +1,6 @@
 //use crate::webapi::User;
 
-use crate::webapi::SQLITE_FILE_AUTH;
+use crate::SQL_AUTH;
 
 use crate::webapi::Form;
 use crate::webapi::Status;
