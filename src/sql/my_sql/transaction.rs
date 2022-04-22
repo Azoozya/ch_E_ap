@@ -43,7 +43,7 @@ impl<'a> CHEAPTransaction<'a> {
     }
 
     pub fn last_exec<A: AsRef<str>, T: Into<Params>>(mut self, query: A, params: T) -> bool {
-        self.prep_exec(query, params);
+        self.single_exec(query, params);
         let ret = !self.error;
         match ret {
             true => self.rollback(),
@@ -62,7 +62,7 @@ impl<'a> CHEAPTransaction<'a> {
             for i in 0..query.len() {
                 let stmt = &query[i];
                 let prm = &params[i];
-                self.prep_exec(stmt, prm);
+                self.single_exec(stmt, prm);
                 // If statement cause an error, we rollback...
                 if self.error {
                     self.rollback();

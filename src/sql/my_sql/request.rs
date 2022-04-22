@@ -25,6 +25,23 @@ impl User {
     pub fn table() -> String {
         CHEAPTable::Users.name()
     }
+
+    pub fn prepare_retrieve_id() -> String {
+        format!(r#"DELIMITER //
+
+        DROP PROCEDURE IF EXISTS retrieve;
+        CREATE PROCEDURE retrieve(arg VARCHAR(20))
+        BEGIN
+           IF (SELECT COUNT(*) FROM `{}` WHERE `name`=arg) > 0
+           THEN
+              SELECT `id` FROM `{}` WHERE `name`=arg;
+           ELSE
+              SELECT COUNT(`id`) FROM `{}` WHERE `name`=arg;
+           END IF;
+        END 
+        //
+        DELIMITER ;"#,&Self::table(),&Self::table(),&Self::table())
+    }
 }
 
 /* ########################  Challenge  ########################### */
@@ -86,17 +103,17 @@ pub fn demo() {
     ];
     // () means "no params"
     let params = vec![(), (), ()];
-    if tr.exec(drops, params) {
+    if tr.full_exec(drops, params) {
         // You can just create a pool without instantiate a full CHEAPTransaction
         //let pool = CHEAPTransaction::pool(SQL_ROOT.to_string());
 
-        // by calling succesive prep_exec, you'll modify tr -> don't forget the mut
+        // by calling succesive single_exec, you'll modify tr -> don't forget the mut
         let mut tr = CHEAPTransaction::new(SQL_ROOT.to_string());
 
-        tr.prep_exec(Cookie::prepare_down_table(), ());
-        tr.prep_exec(Challenge::prepare_down_table(), ());
-        tr.last_prep_exec(User::prepare_down_table(), ());
-        // or a third prep_exec then :
+        tr.single_exec(Cookie::prepare_down_table(), ());
+        tr.single_exec(Challenge::prepare_down_table(), ());
+        tr.last_exec(User::prepare_down_table(), ());
+        // or a third last_exec then :
         //tr.transaction.commit();
     }
 }
