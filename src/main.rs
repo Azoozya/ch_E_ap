@@ -3,26 +3,26 @@ extern crate rocket;
 //#[macro_use]
 extern crate mysql;
 
-use rocket::{Rocket,Build};
-use rocket::fs::{relative, FileServer};
 use lazy_static::lazy_static;
+use rocket::fs::{relative, FileServer};
+use rocket::{Build, Rocket};
 
 /*use crate::webapi::user::{
     ...
 };*/
 
-mod webapi;
 mod error;
 mod sql;
-use crate::webapi::{index,server_js,server_wasm,logout};
-use crate::webapi::challenge::{login};
-use crate::sql::my_sql::request::{demo};
-use crate::sql::my_sql::schema::{User,Challenge,Cookie};
+mod webapi;
+use crate::sql::my_sql::request::demo;
+use crate::sql::my_sql::schema::{Challenge, Cookie, User};
+use crate::webapi::challenge::login;
+use crate::webapi::{index, logout, server_js, server_wasm};
 
 lazy_static! {
     static ref MYSQL: String = String::from("mysql");
     static ref MYSQL_DB: String = String::from("cheap");
-    // Using mysql in a container but running the binary on the host so impossible to use docker' dns 
+    // Using mysql in a container but running the binary on the host so impossible to use docker' dns
     static ref MYSQL_HOST: String = String::from("172.20.0.2");
     // gonna remove it (far) later
 
@@ -51,15 +51,5 @@ fn rocket() -> Rocket<Build> {
 
     rocket::build()
         .mount("/", FileServer::from(relative!("static/forms")))
-        .mount(
-            "/",
-            routes![
-                index,
-                server_js,
-                server_wasm,
-
-                login,
-                logout,
-            ],
-        )
+        .mount("/", routes![index, server_js, server_wasm, login, logout,])
 }

@@ -1,6 +1,6 @@
 /*
  * id: autoincremented uid
- * name: clients will supply a string, then we'll translate it into id 
+ * name: clients will supply a string, then we'll translate it into id
  * pubkey: authentification passwordless => with asymetric cryptography
  */
 #[derive(Debug)]
@@ -22,7 +22,6 @@ pub struct Challenge {
     expire: u64,
 }
 
-
 /*
  * user_id/id: each 'cookie' is dedicated to one specific User
  * expire: unix_timestamp defining a time limit when accept the cookie.
@@ -34,7 +33,7 @@ pub struct Cookie {
     expire: u64,
 }
 
-#[derive(Debug,PartialEq,Eq)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum CHEAPTable {
     Users,
     Challenges,
