@@ -1,4 +1,5 @@
 -- Your SQL goes here
+-- Update this section when updating functions prepare_up_table in ~/src/sql/mysql/request
 CREATE TABLE `Users` (
   `id` int unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` varchar(20) COLLATE 'ascii_bin' NOT NULL,

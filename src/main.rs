@@ -1,6 +1,6 @@
 #[macro_use]
 extern crate rocket;
-#[macro_use]
+//#[macro_use]
 extern crate mysql;
 
 use rocket::{Rocket,Build};
@@ -16,8 +16,8 @@ mod error;
 mod sql;
 use crate::webapi::{index,server_js,server_wasm,logout};
 use crate::webapi::challenge::{login};
-use crate::sql::mysql::request::{};
-use crate::sql::mysql::schema::{User,Challenge,Cookie};
+use crate::sql::my_sql::request::{demo};
+use crate::sql::my_sql::schema::{User,Challenge,Cookie};
 
 lazy_static! {
     static ref MYSQL: String = String::from("mysql");
@@ -47,6 +47,7 @@ fn rocket() -> Rocket<Build> {
         println!("{}", e);
     };
     */
+    demo();
 
     rocket::build()
         .mount("/", FileServer::from(relative!("static/forms")))
