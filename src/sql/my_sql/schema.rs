@@ -23,12 +23,12 @@ pub struct Challenge {
 }
 
 /*
- * user_id/id: each 'cookie' is dedicated to one specific User
- * expire: unix_timestamp defining a time limit when accept the cookie.
- *         also , retain last activity, for delete unused Users.
+ * user_id/id: each 'Session' is dedicated to one specific User
+ * expire: unix_timestamp defining a time limit when accept the session's cookie.
+ *         also , retain last expiracy, for delete unused Users.
  */
 #[derive(Debug)]
-pub struct Cookie {
+pub struct Session {
     user_id: u32,
     expire: u64,
 }
@@ -37,7 +37,7 @@ pub struct Cookie {
 pub enum CHEAPTable {
     Users,
     Challenges,
-    Cookies,
+    Sessions,
 }
 
 impl CHEAPTable {
@@ -45,7 +45,7 @@ impl CHEAPTable {
         match self {
             CHEAPTable::Users => String::from("Users"),
             CHEAPTable::Challenges => String::from("Challenges"),
-            CHEAPTable::Cookies => String::from("Cookies"),
+            CHEAPTable::Sessions => String::from("Cookies"),
             _ => String::from("Unknown"),
         }
     }

@@ -6,7 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-rocket = { version = "0.5.0-rc.1", features = ["secrets", "tls", "json","mtls"] }
+rocket = { version = "0.5.0-rc.1", features = ["secrets", "tls", "json"] }
 mysql = "^17.0.0"
 urlencoding = "^2.0.0"
 rand = "^0.8.5"

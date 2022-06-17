@@ -15,7 +15,7 @@ mod error;
 mod sql;
 mod webapi;
 use crate::sql::my_sql::request::demo;
-use crate::sql::my_sql::schema::{Challenge, Cookie, User};
+use crate::sql::my_sql::schema::{Challenge, Session, User};
 use crate::webapi::challenge::{login,logged};
 use crate::webapi::{index, logout, server_js, server_wasm};
 
@@ -32,7 +32,7 @@ lazy_static! {
     static ref MYSQL: String = String::from("mysql");
     static ref MYSQL_DB: String = String::from("cheap");
     // Using mysql in a container but running the binary on the host so impossible to use docker' dns
-    static ref MYSQL_HOST: String = String::from("172.20.0.2");
+    static ref MYSQL_HOST: String = String::from("172.18.0.2");
     // gonna remove it (far) later
 
     static ref SQL_HEAD: String = format!("{}",MYSQL.to_string());
@@ -56,7 +56,7 @@ fn rocket() -> Rocket<Build> {
         println!("{}", e);
     };
     */
-    //demo();
+    demo();
 
     rocket::build()
         .mount("/", FileServer::from(relative!("static/forms")))
