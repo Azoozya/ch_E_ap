@@ -1,5 +1,5 @@
 pub mod challenge;
-pub mod cookie;
+mod cryptography;
 
 use crate::error::CHEAPError;
 //use crate::webapi::user::User;
@@ -7,7 +7,7 @@ use crate::error::CHEAPError;
 use rocket::form::Form;
 use rocket::fs::NamedFile;
 use rocket::http::{Cookie, CookieJar, Status}; // https://api.rocket.rs/v0.5-rc/rocket/http/struct.Status.html
-use rocket::response::{status::NotFound, Flash, Redirect};
+use rocket::response::{status::NotFound, Redirect};
 
 use time::{Duration, OffsetDateTime};
 
@@ -39,8 +39,8 @@ pub fn index_post(args: String) -> String {
 }
 
 #[post("/logout")]
-pub fn logout(jar: &CookieJar<'_>) -> Flash<Redirect> {
+pub fn logout(jar: &CookieJar<'_>) -> Redirect {
     //println!("{:#?}",jar.get_private("user_id"));
     jar.remove_private(Cookie::named("user_id"));
-    Flash::success(Redirect::to(uri!(index)), "Successfully logged out.")
+    Redirect::to(uri!(index))
 }

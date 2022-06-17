@@ -16,8 +16,17 @@ mod sql;
 mod webapi;
 use crate::sql::my_sql::request::demo;
 use crate::sql::my_sql::schema::{Challenge, Cookie, User};
-use crate::webapi::challenge::login;
+use crate::webapi::challenge::{login,logged};
 use crate::webapi::{index, logout, server_js, server_wasm};
+
+
+#[allow(dead_code)]
+mod r_crypt;
+
+use ssh_key::{LineEnding,Algorithm};
+use crate::r_crypt::keypair::KeyPair;
+use crate::r_crypt::openssh::openssh_import;
+
 
 lazy_static! {
     static ref MYSQL: String = String::from("mysql");
@@ -47,9 +56,17 @@ fn rocket() -> Rocket<Build> {
         println!("{}", e);
     };
     */
-    demo();
+    //demo();
 
     rocket::build()
         .mount("/", FileServer::from(relative!("static/forms")))
-        .mount("/", routes![index, server_js, server_wasm, login, logout,])
+        .mount("/", routes![index, server_js, server_wasm, login, logout, logged])
 }
+
+
+// https://kerkour.com/rust-cryptography-ecosystem
+// https://github.com/dalek-cryptography/ed25519-dalek/blob/main/tests/ed25519.rs
+// https://github.com/RustCrypto/formats/blob/master/ssh-key/tests/public_key.rs
+//  wasm-pack build --release --target web, pour avoir les fonctions de loading directement dans le .js
+//  dans la fonction async function init(input), changer "*.wasm" en "../wasm/*.wasm"
+// https://rustwasm.github.io/wasm-pack/book/commands/build.html#target

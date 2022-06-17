@@ -1,0 +1,28 @@
+<html>
+<head>
+
+</head>
+<body>
+    <div>
+        Data you want to sign:
+        <input type="text" id="data">
+        <input type="file" accept=".priv" id="private-file">
+        <input type="password" id="passphrase" placeholder="(Facultative)Your passphrase...">
+		<button type="button" id="sign">Signing</button>
+	</div>
+
+<p></p>
+    <div>
+        Signature you want to verify:
+        <input type="text" id="signature">
+        <input type="file" accept=".pub" id="public-file">
+        <button type="button" id="verify">Verify</button>
+    </div>
+
+<p></p>
+    <a href="/">Go back to menu D:</a>
+</body>
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="module" src="/js/wasm.js"></script>
+
+</html>

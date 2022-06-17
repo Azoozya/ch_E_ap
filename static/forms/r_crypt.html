@@ -1,0 +1,35 @@
+<html>
+	<head>
+		<title> Get out !</title>
+	</head>
+	<body>
+		<button type="button" id="dev">Dev</button>
+		<div id="uploading" hidden>
+			<button type="button" id="upload">Upload</button>
+			<input type="file" accept=".pub" id="ppublic-file">
+		</div>
+<p></p>
+		<div id="verifying">
+			<button type="button" id="verify">Verify</button>
+			<input type="file" accept=".pub" id="public-file">
+		</div>
+<p></p>
+		<div id="signing">
+			<button type="button" id="sign">Signing</button>
+			<input type="file" accept=".priv" id="private-file">
+		</div>
+<p></p>
+<input type="password" id="passphrase" placeholder="(Facultative)Your passphrase...">
+<p></p>
+		<div id="generating">
+			<select id="algo" size="1">
+				<option valeur="ed">Ed25519</option>
+   				<option valeur="rsa">RSA</option>
+   				<option valeur="ecdsa">ECDSA</option>
+			</select>
+			<button type="button" id="generate">Generate keys</button>
+		</div>
+	</body>
+		<script type="text/javascript" src="/js/jquery.min.js"></script>
+		<script type="module" src="/js/wasm.js"></script>
+</html>

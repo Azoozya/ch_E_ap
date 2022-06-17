@@ -3,11 +3,12 @@
 use crate::SQL_AUTH;
 
 use crate::webapi::CHEAPError;
-use crate::webapi::Form;
-use crate::webapi::Status;
 
-use crate::webapi::{Cookie, CookieJar};
-use crate::webapi::{Duration, OffsetDateTime};
+use crate::webapi::{ Form, Status, Redirect };
+use crate::webapi::{ Cookie, CookieJar };
+use crate::webapi::{ Duration, OffsetDateTime };
+
+use crate::webapi::cryptography::{import_and_verify};
 
 #[derive(FromForm, Debug)]
 pub struct Challenge {
@@ -84,18 +85,19 @@ fn stage1(chlg: Challenge) -> (Status, &'static str) {
     // Check if user is a known user
     //chlg.user.name()
     if chlg.user == String::from("lama") {
-        (Status::Ok, "nonce")
+        (Status::Ok, "12345")
     } else {
         (CHEAPError::InvalidUser.to_status(), "/")
     }
 }
 
 fn stage2(jar: &CookieJar<'_>, chlg: Challenge) -> (Status, &'static str) {
-    if chlg.signed == String::from("1235446") {
-        let offset = OffsetDateTime::now_utc() + Duration::minutes(15);
-        let cookie = Cookie::build("user_id", "Welcome !".to_string())
-            .expires(offset)
-            .finish();
+    if import_and_verify(chlg,String::from("12345")) {
+        let mut cookie = Cookie::new("user_id", "Welcome !");
+        // None => Session cookie
+        cookie.set_expires(None);
+
+        let offset = OffsetDateTime::now_utc() + Duration::minutes(15);        
 
         //Store expiration time
         println!("{:#?}", offset.timestamp());
@@ -106,5 +108,13 @@ fn stage2(jar: &CookieJar<'_>, chlg: Challenge) -> (Status, &'static str) {
         (Status::Ok, "Access Granted :3")
     } else {
         (CHEAPError::InvalidSigned.to_status(), "incorrect signed")
+    }
+}
+
+#[get("/logged")]
+pub fn logged(jar: &CookieJar<'_>) -> Redirect {
+    match jar.get_private("user_id") {
+        None => Redirect::to(uri!("/challenge.html")),
+        Some(_) => Redirect::to(uri!("/")),
     }
 }
